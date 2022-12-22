@@ -33,18 +33,6 @@ class LinkedList {
     else this.#TAIL = newNode.next;
   }
 
-  get size() {
-    return this.#length;
-  }
-
-  get getHead() {
-    return this.#HEAD;
-  }
-
-  get getTail() {
-    return this.#TAIL;
-  }
-
   at(index) {
     let reqd = this.#HEAD;
     for (let i = 0; i < index; i++) {
@@ -56,6 +44,11 @@ class LinkedList {
 
   pop() {
     let reqd = this.#HEAD;
+    if (this.#length === 1) {
+      this.#HEAD = null;
+      this.#TAIL = null;
+    }
+
     for (let i = 0; i < this.#length - 1; i++) {
       if (i === this.#length - 2) {
         reqd.next = null;
@@ -63,6 +56,8 @@ class LinkedList {
       }
       reqd = reqd.next;
     }
+
+    this.#length--;
   }
 
   contains(value) {
@@ -85,6 +80,45 @@ class LinkedList {
     return null;
   }
 
+  insertAt(value, index) {
+    if (index === 0) {
+      this.prepend(value);
+      return;
+    }
+
+    let reqd = this.#HEAD;
+    let prev = {};
+    for (let i = 0; i <= index - 1; i++) {
+      reqd = reqd.next;
+      if (i === index - 2) {
+        prev = reqd;
+      }
+      if (i === index - 1) {
+        let newNode = new Node(value);
+        prev.next = newNode;
+        newNode.next = reqd;
+      }
+    }
+
+    this.#length++;
+  }
+
+  deleteAt(index) {
+    if (index === this.#length) {
+      this.pop();
+      return;
+    }
+    let reqd = this.#HEAD;
+    let prev = {};
+    for (let i = 0; i <= index - 1; i++) {
+      reqd = reqd.next;
+      if (i === index - 2) prev = reqd;
+      if (i === index - 1) prev.next = reqd.next;
+    }
+
+    this.#length--;
+  }
+
   get toString() {
     let reqd = this.#HEAD;
     let string = "";
@@ -100,17 +134,16 @@ class LinkedList {
 
     return string;
   }
+
+  get size() {
+    return this.#length;
+  }
+
+  get getHead() {
+    return this.#HEAD.value;
+  }
+
+  get getTail() {
+    return this.#TAIL.value;
+  }
 }
-
-const link = new LinkedList();
-
-link.append("Unix1!");
-link.append("Unix2!");
-link.append("Unix3!");
-link.append("Unix4!");
-link.append("Unix5!");
-link.append("Unix6!");
-link.append("Unix7!");
-link.append("Unix8!");
-
-console.log(link.toString);
